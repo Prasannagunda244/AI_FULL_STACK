@@ -1,34 +1,28 @@
-import ollama
 import streamlit as st
-st.title("welcome to my chatBot App!!!")
-with st.sidebar:
-    uploaded_file = st.file_uploader("upload a text file...")
-if uploaded_file:
-        st.write("File uploaded sucessfully...")
-        context= uploaded_file.read().decode("utf-8")
-        st.text(context)     
+import ollama
+st.title("My AI ChatBot")
+st.write("Welcome! Ask me anything.")
 if "messages" not in st.session_state:
     st.session_state.messages = []
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.write(msg["content"])
-question = st.chat_input("You: ")
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.write(message["content"])
+question = st.chat_input("Types your message....")
 if question:
-    st.session_state.messages.append(
-        {"role": "user",
-         "content": question}
-        )
+    st.session_state.messages.append({
+        "role":"user",
+        "content":question
+    })
     with st.chat_message("user"):
         st.write(question)
-    with st.spinner("AI is thinking...."):
-        response = ollama.chat(
-            model="llama3.2:3b",
-            messages =st.session_state.messages
-            )
-    st.session_state.messages.append(
-            {"role": "user",
-            "content": response["message"]["content"]}
-        )
-    with st.chat_message("Assistant"):
-        st.write("AI:", response["message"]["content"])
-
+    response = ollama.chat(
+        model="llama3.2:3b",
+        messages=st.session_state.messages
+    )
+    answer = response['message']['content']
+    st.session_state.messages.append({
+        "role":"assistant",
+        "content": answer
+    })
+    with st.chat_message("assistant"):
+        st.write(answer)
