@@ -13,7 +13,7 @@ with st.sidebar:
             "😂 Fun",
             "💻 Coding",
             "📝 Writing",
-            "💡 Ideas",
+            "💡 Ideas", 
             "📚 General",
             "❤️ Personal"
         ]
